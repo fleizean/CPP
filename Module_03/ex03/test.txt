@@ -1,0 +1,13 @@
+[48:5:208m -----### TESTING CLAPTRAP ###-----[0m
+ClapTrap copy constructor called for default_clap_name
+ScavTrap default constructor called
+FragTrap default constructor called
+DiamondTrap default constructor called
+I am a DiamondTrap, my name is unnamed. My ClapTrap name is default_clap_name
+hit point: 100
+energy point: 50
+damage : 30
+DiamondTrap destructor called for unnamed
+FragTrap destructor called for default_clap_name
+ScavTrap destructor called for default_clap_name
+ClapTrap Destructor called for default_clap_name
