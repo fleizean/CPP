@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Span.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fleizean <fleizean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: eyagiz <eyagiz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 12:16:22 by eyagiz            #+#    #+#             */
-/*   Updated: 2023/01/09 19:29:36 by fleizean         ###   ########.fr       */
+/*   Updated: 2023/01/10 18:14:37 by eyagiz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,14 +70,13 @@ int Span::shortestSpan()
         
         if (container.size() < 2)
             throw Span::OneSpanException();
-
         std::sort(container.begin(), container.end());
         int min = INT_MAX;
-	    for (int i = 0; i < container.size() - 1; i++)
-	    {
-		    if (min > container[i + 1] - container[i])
-		    	min = container[i + 1] - container[i];
-	    }
+        for(int i = 0; i < container.size() - 1; i++)
+        {
+            if(min > mySpan(container[i + 1], container[i]))
+                min = mySpan(container[i + 1], container[i]);
+        }
         return(min);
     }
     catch(const std::exception& e)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fleizean <fleizean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: eyagiz <eyagiz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 12:37:16 by eyagiz            #+#    #+#             */
-/*   Updated: 2023/01/09 19:07:45 by fleizean         ###   ########.fr       */
+/*   Updated: 2023/01/10 18:13:37 by eyagiz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ int main()
     mstack.push(3);
     mstack.push(5);
     mstack.push(737);
-    //[...]
     mstack.push(0); // sırasıyla girenler; 0, 737, 5, 3, 5,
     MutantStack<int>::iterator it = mstack.begin();
     MutantStack<int>::iterator ite = mstack.end();
@@ -35,9 +34,9 @@ int main()
     std::cout << "\n\n******* WHILE LOOP *******" << std::endl; 
     while (it != ite)
     {
-    std::cout << *it << std::endl;
-    ++it;
+        std::cout << *it << std::endl;
+        ++it;
     }
-    std::stack<int> s(mstack);
+    std::stack<int> s(mstack); // STL'nin copy constructor
     return 0;
 }

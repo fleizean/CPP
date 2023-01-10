@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fleizean <fleizean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: eyagiz <eyagiz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 12:16:12 by eyagiz            #+#    #+#             */
-/*   Updated: 2023/01/09 19:37:24 by fleizean         ###   ########.fr       */
+/*   Updated: 2023/01/10 17:50:10 by eyagiz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ int main(int ac, char **av)
     int size = atoi(av[1]); // vectorün boyutunu belirlemek için
 	std::string command;
     std::vector<int> vec;
+	srand(time(NULL)); // random sayı gelmesi için
    	for(int i = 0; i < size; i++)
 		vec.push_back(rand() % (size - 1 + 1 ) + 1); // random sayı formül: rand() % (size - min + 1) + 1 = aralığa göre rand atıyorum
 	while(1)
@@ -45,7 +46,7 @@ int main(int ac, char **av)
    			}
    			catch(const std::exception& e)
    			{
-   			    std::cerr << e.what() << '\n';
+   			    std::cout << e.what() << '\n';
    			}
 		}
 		else if(!command.compare("PRINT") || !command.compare("2"))

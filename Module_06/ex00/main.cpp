@@ -16,7 +16,7 @@ int main(int ac, char **av)
 {
     if(ac != 2)
     {
-        std::cerr << "Usage: ./convert <scalar_to_convert>\n"
+        std::cout << "Usage: ./convert <scalar_to_convert>\n"
 			"Valid scalars to convert: int, float, double or char."
 			    << std::endl;
         return(1);

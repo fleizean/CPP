@@ -12,6 +12,27 @@
 
 #include "Convert.hpp"
 
+static int findtwo(std::string str)
+{
+    char tmp2;
+    int moref = 0, moreinc = 0, moredec = 0, morepoint = 0;
+    int j = 0;
+    for (int i = 0; i < str.size(); i++)
+    {
+        char tmp = str[i];
+        moref = (tmp == 'f') ? moref+=1 : moref; 
+        moreinc = (tmp == '+') ? moreinc+= 1 : moreinc;   
+        moredec = (tmp == '-') ? moredec+= 1 : moredec;   
+        morepoint = (tmp == '.') ? morepoint+= 1 : morepoint;
+        j = i;
+    }
+    j--;
+    tmp2 = str[j];
+    if(moref > 1 || moreinc > 1 || moredec > 1 || morepoint > 1 || (tmp2 == 'f' && morepoint == 1))
+        return(-1);
+    return(1);
+}
+
 // Control Area
 bool isPseudo(std::string s)
 {
@@ -26,12 +47,14 @@ bool isOk(std::string &str)
 
     if(isPseudo(str))
         return (true);
-    if(str.length() == 1 && isalpha(str[0]))
+    if(str.length() == 1 && isascii(str[0]))
     {
         outs << static_cast<int>(str[0]);
         str = outs.str();
         return(true);
     }
+    if(findtwo(str) != 1)
+        return (false);
     for(i = 0; i < str.size(); i++)
     {
         tmp = str[i];
@@ -45,12 +68,12 @@ static void toChar(std::string &str)
 {
     char tmp;
     if(isPseudo(str)){
-        std::cerr << "Impossible conversion" << std::endl;
+        std::cout << "Impossible conversion" << std::endl;
         return;
     }
     tmp = static_cast<char>(std::atoi(str.c_str())); // atoi char* tipinde aldığı için c_str ile str'nin sonuna '\0' atarak char * çevirdik
     if (!std::isprint(tmp)){
-        std::cerr << "Non Displayable" << std::endl;
+        std::cout << "Non Displayable" << std::endl;
         return;
     }
     std::cout << tmp << std::endl;
@@ -59,11 +82,11 @@ static void toChar(std::string &str)
 static void toInt(std::string &str)
 {
     if(isPseudo(str)){
-        std::cerr << "Impossible conversion" << std::endl;
+        std::cout << "Impossible conversion" << std::endl;
         return;
     }
     if (atol(str.c_str()) > INT_MAX || atol(str.c_str()) < INT_MIN){
-        std::cerr << "Impossible Max-Min conversion" << std::endl;
+        std::cout << "Impossible Max-Min conversion" << std::endl;
         return;
     }
     std::cout << std::atoi(str.c_str()) << std::endl;

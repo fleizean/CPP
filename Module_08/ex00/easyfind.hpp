@@ -6,7 +6,7 @@
 /*   By: eyagiz <eyagiz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 12:16:04 by eyagiz            #+#    #+#             */
-/*   Updated: 2023/01/09 13:36:54 by eyagiz           ###   ########.fr       */
+/*   Updated: 2023/01/10 18:15:13 by eyagiz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,9 @@ public:
 template <typename T>
 typename T::iterator easyfind(T &container, int num){
     for(typename T::iterator it = container.begin(); it != container.end(); it++){
-        if(*it == num)
-        {
+        if(*it == num){
             std::cout << "I have successfully found the value you entered " << num << "\n";
-            return(it);
+            return (it);
         }
     }
     throw OutOfContainer();
