@@ -20,6 +20,10 @@ Module_09/ex00/btc
 Module_09/ex01/RPN
 Module_09/ex02/PmergeMe
 
+# Other module compiled binaries (no extension)
+Module_06/ex00/convert
+Module_07/ex02/array
+
 # ===== macOS =====
 .DS_Store
 .AppleDouble
