@@ -1,0 +1,56 @@
+# ===== C++ Build artifacts =====
+*.o
+*.obj
+*.so
+*.dylib
+*.a
+*.lib
+*.exe
+*.out
+*.app
+*.dSYM/
+*.gch
+*.pch
+
+# Common 42 binary names (no extension)
+*.bin
+
+# Module_09 compiled binaries
+Module_09/ex00/btc
+Module_09/ex01/RPN
+Module_09/ex02/PmergeMe
+
+# ===== macOS =====
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+.fseventsd
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# ===== Windows =====
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# ===== Linux =====
+*~
+
+# ===== IDE / Editor =====
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ===== Claude / AI tooling =====
+.claude/
+CLAUDE.local.md
+.anthropic/
+
+# ===== Logs =====
+*.log
