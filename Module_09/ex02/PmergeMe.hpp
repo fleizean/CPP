@@ -17,6 +17,7 @@ class PmergeMe
 
 	private:
 		std::vector<int> parseArgs(int argc, char **argv) const;
+		std::deque<int> parseArgsDeque(int argc, char **argv) const;
 
 		std::vector<int> sortVector(std::vector<int> seq) const;
 		std::deque<int> sortDeque(std::deque<int> seq) const;

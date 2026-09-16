@@ -1,5 +1,5 @@
 #include "RPN.hpp"
-#include <vector>
+#include <list>
 #include <sstream>
 #include <stdexcept>
 #include <cctype>
@@ -21,7 +21,7 @@ RPN::~RPN() {}
 
 int RPN::evaluate(const std::string &expression) const
 {
-	std::vector<int> values;
+	std::list<int> values;
 	std::istringstream iss(expression);
 	std::string token;
 

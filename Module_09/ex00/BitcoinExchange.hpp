@@ -16,11 +16,12 @@ class BitcoinExchange
 		void processInput(const std::string &path) const;
 
 	private:
-		std::map<std::string, float> _database;
+		std::map<std::string, double> _database;
 
+		bool isHeader(const std::string &line) const;
 		bool isValidDate(const std::string &date) const;
 		bool splitLine(const std::string &line, char sep, std::string &left, std::string &right) const;
-		float findRate(const std::string &date) const;
+		double findRate(const std::string &date) const;
 };
 
 #endif

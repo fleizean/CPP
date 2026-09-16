@@ -4,6 +4,8 @@
 #include <iostream>
 #include <cstdlib>
 #include <stdexcept>
+#include <cctype>
+#include <iomanip>
 
 BitcoinExchange::BitcoinExchange() {}
 
@@ -38,6 +40,17 @@ bool BitcoinExchange::splitLine(const std::string &line, char sep, std::string &
 		right.erase(right.size() - 1);
 
 	return true;
+}
+
+bool BitcoinExchange::isHeader(const std::string &line) const
+{
+	std::string left, right;
+
+	if (splitLine(line, '|', left, right))
+		return (left == "date");
+	if (splitLine(line, ',', left, right))
+		return (left == "date");
+	return false;
 }
 
 bool BitcoinExchange::isValidDate(const std::string &date) const
@@ -78,12 +91,18 @@ void BitcoinExchange::loadDatabase(const std::string &path)
 		throw std::runtime_error("could not open file");
 
 	std::string line;
-	std::getline(file, line); // skip header "date,exchange_rate"
+	bool first = true;
 
 	while (std::getline(file, line))
 	{
 		if (line.empty())
 			continue;
+		if (first)
+		{
+			first = false;
+			if (isHeader(line)) // "date,exchange_rate"
+				continue;
+		}
 
 		std::string date, rateStr;
 		if (!splitLine(line, ',', date, rateStr))
@@ -91,14 +110,14 @@ void BitcoinExchange::loadDatabase(const std::string &path)
 		if (!isValidDate(date))
 			continue;
 
-		float rate = static_cast<float>(std::atof(rateStr.c_str()));
+		double rate = std::atof(rateStr.c_str());
 		_database[date] = rate;
 	}
 }
 
-float BitcoinExchange::findRate(const std::string &date) const
+double BitcoinExchange::findRate(const std::string &date) const
 {
-	std::map<std::string, float>::const_iterator it = _database.lower_bound(date);
+	std::map<std::string, double>::const_iterator it = _database.lower_bound(date);
 
 	if (it != _database.end() && it->first == date)
 		return it->second;
@@ -116,12 +135,20 @@ void BitcoinExchange::processInput(const std::string &path) const
 		throw std::runtime_error("could not open file");
 
 	std::string line;
-	std::getline(file, line); // skip header "date | value"
+	bool first = true;
+
+	std::cout << std::setprecision(10);
 
 	while (std::getline(file, line))
 	{
 		if (line.empty())
 			continue;
+		if (first)
+		{
+			first = false;
+			if (isHeader(line)) // "date | value"
+				continue;
+		}
 
 		std::string date, valueStr;
 		if (!splitLine(line, '|', date, valueStr) || !isValidDate(date))
@@ -131,7 +158,7 @@ void BitcoinExchange::processInput(const std::string &path) const
 		}
 
 		std::istringstream iss(valueStr);
-		float value;
+		double value;
 		char extra;
 		if (!(iss >> value) || (iss >> extra))
 		{
@@ -152,7 +179,7 @@ void BitcoinExchange::processInput(const std::string &path) const
 
 		try
 		{
-			float rate = findRate(date);
+			double rate = findRate(date);
 			std::cout << date << " => " << value << " = " << (value * rate) << std::endl;
 		}
 		catch (const std::exception &e)

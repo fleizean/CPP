@@ -55,6 +55,39 @@ std::vector<int> PmergeMe::parseArgs(int argc, char **argv) const
 	return numbers;
 }
 
+std::deque<int> PmergeMe::parseArgsDeque(int argc, char **argv) const
+{
+	std::deque<int> numbers;
+
+	for (int i = 1; i < argc; ++i)
+	{
+		std::string token(argv[i]);
+		size_t start = 0;
+
+		if (!token.empty() && token[0] == '+')
+			start = 1;
+		if (start >= token.size())
+			throw std::runtime_error("Error");
+
+		for (size_t j = start; j < token.size(); ++j)
+		{
+			if (!std::isdigit(static_cast<unsigned char>(token[j])))
+				throw std::runtime_error("Error");
+		}
+
+		long value = std::strtol(token.c_str(), NULL, 10);
+		if (value < 0 || value > INT_MAX)
+			throw std::runtime_error("Error");
+
+		numbers.push_back(static_cast<int>(value));
+	}
+
+	if (numbers.empty())
+		throw std::runtime_error("Error");
+
+	return numbers;
+}
+
 std::vector<size_t> PmergeMe::jacobsthalInsertionOrder(size_t n) const
 {
 	std::vector<size_t> order;
@@ -145,28 +178,61 @@ std::vector<size_t> PmergeMe::fordJohnsonVector(const std::vector<int> &values, 
 	}
 
 	std::vector<size_t> result(sortedBig);
+
+	/* bigPos[j] = sortedBig[j]'nin result icindeki guncel konumu */
+	std::vector<size_t> bigPos;
+	for (size_t i = 0; i < sortedBig.size(); ++i)
+		bigPos.push_back(i);
+
+	/* b1 < a1 oldugu bilindigi icin karsilastirmasiz basa eklenir */
 	if (!pend.empty())
+	{
 		result.insert(result.begin(), pend[0]);
+		for (size_t i = 0; i < bigPos.size(); ++i)
+			++bigPos[i];
+	}
 
 	std::vector<size_t> order = jacobsthalInsertionOrder(pend.size());
 	for (size_t k = 0; k < order.size(); ++k)
 	{
-		size_t valIdx = pend[order[k]];
+		size_t j = order[k];
+		size_t valIdx = pend[j];
 		int val = values[valIdx];
 
-		std::vector<size_t>::iterator pos = result.begin();
-		while (pos != result.end() && values[*pos] < val)
-			++pos;
-		result.insert(pos, valIdx);
+		/* bj esi olan aj'den kucuk oldugu icin arama [0, bigPos[j]) ile sinirli */
+		size_t lo = 0;
+		size_t hi = bigPos[j];
+		while (lo < hi)
+		{
+			size_t mid = lo + (hi - lo) / 2;
+			if (values[result[mid]] < val)
+				lo = mid + 1;
+			else
+				hi = mid;
+		}
+
+		result.insert(result.begin() + lo, valIdx);
+		for (size_t i = 0; i < bigPos.size(); ++i)
+		{
+			if (bigPos[i] >= lo)
+				++bigPos[i];
+		}
 	}
 
 	if (hasStray)
 	{
 		int val = values[strayIdx];
-		std::vector<size_t>::iterator pos = result.begin();
-		while (pos != result.end() && values[*pos] < val)
-			++pos;
-		result.insert(pos, strayIdx);
+		size_t lo = 0;
+		size_t hi = result.size();
+		while (lo < hi)
+		{
+			size_t mid = lo + (hi - lo) / 2;
+			if (values[result[mid]] < val)
+				lo = mid + 1;
+			else
+				hi = mid;
+		}
+		result.insert(result.begin() + lo, strayIdx);
 	}
 
 	return result;
@@ -234,28 +300,61 @@ std::deque<size_t> PmergeMe::fordJohnsonDeque(const std::deque<int> &values, std
 	}
 
 	std::deque<size_t> result(sortedBig);
+
+	/* bigPos[j] = sortedBig[j]'nin result icindeki guncel konumu */
+	std::deque<size_t> bigPos;
+	for (size_t i = 0; i < sortedBig.size(); ++i)
+		bigPos.push_back(i);
+
+	/* b1 < a1 oldugu bilindigi icin karsilastirmasiz basa eklenir */
 	if (!pend.empty())
+	{
 		result.insert(result.begin(), pend[0]);
+		for (size_t i = 0; i < bigPos.size(); ++i)
+			++bigPos[i];
+	}
 
 	std::vector<size_t> order = jacobsthalInsertionOrder(pend.size());
 	for (size_t k = 0; k < order.size(); ++k)
 	{
-		size_t valIdx = pend[order[k]];
+		size_t j = order[k];
+		size_t valIdx = pend[j];
 		int val = values[valIdx];
 
-		std::deque<size_t>::iterator pos = result.begin();
-		while (pos != result.end() && values[*pos] < val)
-			++pos;
-		result.insert(pos, valIdx);
+		/* bj esi olan aj'den kucuk oldugu icin arama [0, bigPos[j]) ile sinirli */
+		size_t lo = 0;
+		size_t hi = bigPos[j];
+		while (lo < hi)
+		{
+			size_t mid = lo + (hi - lo) / 2;
+			if (values[result[mid]] < val)
+				lo = mid + 1;
+			else
+				hi = mid;
+		}
+
+		result.insert(result.begin() + lo, valIdx);
+		for (size_t i = 0; i < bigPos.size(); ++i)
+		{
+			if (bigPos[i] >= lo)
+				++bigPos[i];
+		}
 	}
 
 	if (hasStray)
 	{
 		int val = values[strayIdx];
-		std::deque<size_t>::iterator pos = result.begin();
-		while (pos != result.end() && values[*pos] < val)
-			++pos;
-		result.insert(pos, strayIdx);
+		size_t lo = 0;
+		size_t hi = result.size();
+		while (lo < hi)
+		{
+			size_t mid = lo + (hi - lo) / 2;
+			if (values[result[mid]] < val)
+				lo = mid + 1;
+			else
+				hi = mid;
+		}
+		result.insert(result.begin() + lo, strayIdx);
 	}
 
 	return result;
@@ -281,19 +380,21 @@ std::deque<int> PmergeMe::sortDeque(std::deque<int> seq) const
 void PmergeMe::run(int argc, char **argv) const
 {
 	std::vector<int> numbers = parseArgs(argc, argv);
-	std::deque<int> dq(numbers.begin(), numbers.end());
 
 	std::cout << "Before: ";
 	for (size_t i = 0; i < numbers.size(); ++i)
 		std::cout << numbers[i] << (i + 1 < numbers.size() ? " " : "");
 	std::cout << std::endl;
 
+	/* olculen sure hem veri yonetimini (container'i doldurmayi) hem siralamayi kapsar */
 	std::clock_t startVec = std::clock();
-	std::vector<int> sortedVec = sortVector(numbers);
+	std::vector<int> vec = parseArgs(argc, argv);
+	std::vector<int> sortedVec = sortVector(vec);
 	std::clock_t endVec = std::clock();
 
 	std::clock_t startDeq = std::clock();
-	std::deque<int> sortedDeq = sortDeque(dq);
+	std::deque<int> deq = parseArgsDeque(argc, argv);
+	std::deque<int> sortedDeq = sortDeque(deq);
 	std::clock_t endDeq = std::clock();
 
 	std::cout << "After: ";
