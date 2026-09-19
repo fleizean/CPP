@@ -13,19 +13,17 @@ class PmergeMe
 		PmergeMe &operator=(const PmergeMe &other);
 		~PmergeMe();
 
-		void run(int argc, char **argv) const;
-
-	private:
-		std::vector<int> parseArgs(int argc, char **argv) const;
-		std::deque<int> parseArgsDeque(int argc, char **argv) const;
-
 		std::vector<int> sortVector(std::vector<int> seq) const;
 		std::deque<int> sortDeque(std::deque<int> seq) const;
 
-		std::vector<size_t> fordJohnsonVector(const std::vector<int> &values, std::vector<size_t> indices) const;
-		std::deque<size_t> fordJohnsonDeque(const std::deque<int> &values, std::deque<size_t> indices) const;
-
+	private:
 		std::vector<size_t> jacobsthalInsertionOrder(size_t n) const;
+
+		std::vector<size_t> fordJohnsonVector(const std::vector<int> &values, std::vector<size_t> indices) const;
+		size_t lowerBoundVector(const std::vector<int> &values, const std::vector<size_t> &chain, size_t hi, int val) const;
+
+		std::deque<size_t> fordJohnsonDeque(const std::deque<int> &values, std::deque<size_t> indices) const;
+		size_t lowerBoundDeque(const std::deque<int> &values, const std::deque<size_t> &chain, size_t hi, int val) const;
 };
 
 #endif
